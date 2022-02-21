@@ -1,6 +1,5 @@
 
 const express = require('express')
-const morgan = require('morgan')
 const app = express()
 const cors = require('cors')
 require('dotenv').config()
@@ -32,7 +31,7 @@ app.get('/', (req, res) => {
 /*
 app.get('/info', (req, res) => {
     console.log(getNumberofPersons())
-    res.send(`<div>Phonebook has info for ${getNumberofPersons()} people</div> 
+    res.send(`<div>Phonebook has info for ${getNumberofPersons()} people</div>
     <div>${Date()}</div>`)
   })
 
@@ -45,58 +44,58 @@ function getNumberofPersons() {
 
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
- // const name = request.body.name
-// const personExists = persons.find(person => person.name === name)
+  // const name = request.body.name
+  // const personExists = persons.find(person => person.name === name)
 
   if (body.name === undefined || body.number === undefined) {
-    return response.status(400).json({ 
-      error: 'name or number missing' 
+    return response.status(400).json({
+      error: 'name or number missing'
     })
   }
 
   /*
   if (personExists) {
-    return response.status(400).json({ 
-      error: 'name already exists' 
+    return response.status(400).json({
+      error: 'name already exists'
     })
   }
 */
   const person = new Person({
     name: body.name,
-    number: body.number || "112"
+    number: body.number || '112'
   })
 
   person.save().then(savedPerson => {
     response.json(savedPerson)
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
 app.get('/api/persons', (req, res) => {
   Person.find({}).then(persons => {
-    res.json(persons) 
+    res.json(persons)
   })
 })
 
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-  .then(result => {
-    response.status(204).end()
-  })
-  .catch(error => next(error))
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
     .then(person => {
-    if (person) {
-      response.json(person)
-    } else {
-      response.status(404).end()
-    }
-  })
-  .catch(error => next(error))
+      if (person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
@@ -106,7 +105,7 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint)
 
 const errorHandler = (error, request, response, next) => {
-  console.error("Käyttääkö tätä", error.message)
+  console.error('Käyttääkö tätä', error.message)
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
